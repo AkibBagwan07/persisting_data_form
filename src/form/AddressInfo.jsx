@@ -4,72 +4,97 @@ import { useNavigate } from 'react-router-dom'
 const AddressInfo = () => {
     const navigate = useNavigate()
 
-    const navigateToReviewData = () => { 
-        navigate("/reviewData")
+    // const navigateToReviewData = () => { 
+        
+    // }
+    
+  const backToPersonalInfo = () => { 
+      if (address1 !== "" && address2 !== "" &&  city !== "" && state !=="" && zipCode !== "") {
+      let obj = {
+        Address1: address1,
+        Address2: address2,
+        City: city,
+        State: state,
+        ZipCode : zipCode
+      }
+      localStorage.setItem("userAddressInfo", JSON.stringify(obj))
+      navigate("/")
+    }
     }
     
-    const backToPersonalInfo = () => { 
-        navigate("/")
-    }
-    
-    const [addressData, setAddressData] = useState({
-    address1: "",
-    address2: "",
-    city: "",
-    state: "",
-    zipCode:""
-    })
+    const [address1, setAddress1] = useState("")
+    const [address2, setAddress2] = useState("")
+    const [city, setCity] = useState("")
+    const [state, setState] = useState("")
+    const [zipCode, setZipCode] = useState("")
     
   //console.log(addressData)
   
-    
-
-    const handleData = (e) => { 
-        setAddressData({
-            ...addressData,
-            [e.target.id] : e.target.value
-        })
+ const navigateToReviewData = () => { 
+    if (address1 !== "" && address2 !== "" &&  city !== "" && state !=="" && zipCode !== "") {
+      let obj = {
+        Address1: address1,
+        Address2: address2,
+        City: city,
+        State: state,
+        ZipCode : zipCode
+      }
+      localStorage.setItem("userAddressInfo", JSON.stringify(obj))
+      navigate("/reviewData")
     }
+  }
 
+  useEffect(() => { 
+     let userAddressInfo = JSON.parse(localStorage.getItem("userAddressInfo"));
+    setAddress1(userAddressInfo?.Address1)
+    setAddress2(userAddressInfo?.Address2)
+    setCity(userAddressInfo?.City)
+    setState(userAddressInfo?.State)
+    setZipCode(userAddressInfo?.ZipCode)
+  }, [])
+  
   return (
-    <div>
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      navigateToReviewData()
+    }}>
       <h1>Fill in all Details</h1>
       <div>
         <label htmlFor="address1">
           Address Line 1
         </label>
-        <input onChange={handleData} id='address1' required type="text" />
+        <input value={address1} onChange={(e)=>setAddress1(e.target.value)} id='address1' required type="text" />
       </div>
       <div>
         <label htmlFor="address2">
           Address Line 2
         </label>
-        <input onChange={handleData} id='address2' required type="text" />
+        <input value={address2} onChange={(e)=>setAddress2(e.target.value)} id='address2' required type="text" />
       </div>
       <div>
         <label htmlFor="city">
           City
         </label>
-        <input onChange={handleData} id='city' required type="text" />
+        <input value={city} onChange={(e) =>setCity(e.target.value)} id='city' required type="text" />
           </div>
           <div>
         <label htmlFor="state">
           State
         </label>
-        <input onChange={handleData} id='state' required type="text" />
+        <input value={state} onChange={(e)=>setState(e.target.value)} id='state' required type="text" />
           </div>
           <div>
         <label htmlFor="zipCode">
           Zip Code
         </label>
-        <input onChange={handleData} id='zipCode' required type="text" />
+        <input value={zipCode} onChange={(e)=>setZipCode(e.target.value)} id='zipCode' required type="text" />
       </div>
           <div>
               <button onClick={backToPersonalInfo}>Back</button>
-              <button onClick={navigateToReviewData}>Next</button>
+              <button type='submit'>Next</button>
       </div>
 
-          </div>
+          </form>
   )
 }
 

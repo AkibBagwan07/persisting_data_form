@@ -12,7 +12,9 @@ const PersonalInfo = () => {
   // console.log(dataofSessionStorage)
   
   const navigateToAddressInfo = () => { 
-    if (fullName !== "" && email !== "" && phone !== "") {
+    
+        const dataValidation = validateDate()
+      if (dataValidation === true) {
       let obj = {
         Name: fullName,
         Email: email,
@@ -21,6 +23,36 @@ const PersonalInfo = () => {
       localStorage.setItem("userInfo", JSON.stringify(obj))
       navigate("/addressInfo")
     }
+    // if (phone?.length < 10)
+    //   alert("enter 10 digit phone number")
+    // if (email?.length > 0) {
+    //   let emailCheck = email.includes("@")
+    //   if (emailCheck === false) {
+    //     alert("enter valid email")
+        // if (emailCheck.index === 0)
+        //   alert("enter valid email")
+   //   }
+   // }
+    // if (dataValidation === true) { 
+    //    localStorage.setItem("userInfo", JSON.stringify(obj))
+    //    navigate("/addressInfo")
+    // }
+
+    //  console.log(phone.length)
+  }
+
+  const validateDate = () => { 
+    
+    if (email.includes("@") !== true) {
+      alert("enter valid email")
+      return false
+    }
+    else if (phone.length < 10) {
+      alert("enter 10 digit mobile number")
+      return false
+    }
+    else
+      return true
   }
 
   useEffect(() => { 
@@ -42,7 +74,10 @@ const PersonalInfo = () => {
   //  }
   
   return (
-    <div>
+    <form onSubmit={(e) => {
+      e.preventDefault()
+      navigateToAddressInfo()
+    }}>
       <h1>Fill in all Details</h1>
       <div>
         <label htmlFor="fullName">
@@ -62,8 +97,8 @@ const PersonalInfo = () => {
         </label>
         <input  value={phone} name='phone' id='Phone' onChange={(e)=>setPhone(e.target.value)} required type="text" />
       </div>
-      <button onClick={navigateToAddressInfo}>Next</button>
-    </div>
+      <button type='submit'>Next</button>
+    </form>
   )
 }
 
